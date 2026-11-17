@@ -17,7 +17,7 @@ concurrency:
 jobs:
   web:
     name: Web app (GitHub Pages)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -41,20 +41,25 @@ jobs:
 
   android:
     name: Android APK
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
-      - uses: android-actions/setup-android@v3
-      - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-36" "build-tools;35.0.0" "platform-tools"
+      - name: Check Android SDK (preinstalled on the runner)
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          ls "$ANDROID_HOME/platforms" "$ANDROID_HOME/build-tools" || true
+          # make sure the platform this app compiles against is present (no-op if already installed)
+          "$SDKM" --install "platforms;android-36" "build-tools;35.0.0" || echo "sdkmanager install skipped – Gradle will fetch what it needs"
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
       - run: npm ci
       - run: npm run build
       - run: npx cap sync android
