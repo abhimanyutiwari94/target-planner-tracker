@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0E4A86"/>
+      <stop offset="1" stop-color="#06213F"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FFD27A"/>
+      <stop offset="0.55" stop-color="#F7A23B"/>
+      <stop offset="1" stop-color="#E8741A"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF1B8"/>
+      <stop offset="0.45" stop-color="#F5C542"/>
+      <stop offset="1" stop-color="#B9831A"/>
+    </linearGradient>
+    <linearGradient id="shaft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFE7A8"/>
+      <stop offset="1" stop-color="#F5C542"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="0" fill="url(#bg)"/>
+  <!-- Surya rays (Suryavansh) -->
+  <g transform="translate(256 256)" fill="#F28C28" opacity="0.38">
+    <g id="ray"><path d="M-9 -150 L0 -232 L9 -150 Z"/></g>
+    <use href="#ray" transform="rotate(22.5)"/><use href="#ray" transform="rotate(45)"/><use href="#ray" transform="rotate(67.5)"/>
+    <use href="#ray" transform="rotate(90)"/><use href="#ray" transform="rotate(112.5)"/><use href="#ray" transform="rotate(135)"/>
+    <use href="#ray" transform="rotate(157.5)"/><use href="#ray" transform="rotate(180)"/><use href="#ray" transform="rotate(202.5)"/>
+    <use href="#ray" transform="rotate(225)"/><use href="#ray" transform="rotate(247.5)"/><use href="#ray" transform="rotate(270)"/>
+    <use href="#ray" transform="rotate(292.5)"/><use href="#ray" transform="rotate(315)"/><use href="#ray" transform="rotate(337.5)"/>
+  </g>
+  <circle cx="256" cy="256" r="138" fill="url(#sun)"/>
+  <circle cx="256" cy="256" r="138" fill="none" stroke="#FFE3A3" stroke-width="3" opacity="0.7"/>
+  <circle cx="256" cy="256" r="118" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.25" stroke-dasharray="4 8"/>
+  <!-- Dhanush + Tir, rotated so arrow points to the sky (progress) -->
+  <g transform="translate(250 262) rotate(-45) scale(0.86)">
+    <!-- string drawn back -->
+    <path d="M-4 -196 L-150 0 L-4 196" fill="none" stroke="#FFF6DA" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- bow limb: crescent with recurved tips -->
+    <path d="M-6 -200 C 150 -150, 150 150, -6 200 C 112 132, 112 -132, -6 -200 Z" fill="url(#gold)" stroke="#7A4A06" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M-6 -200 c 4 -20 20 -30 38 -26" fill="none" stroke="#F5C542" stroke-width="8" stroke-linecap="round"/><circle cx="33" cy="-226" r="5" fill="#F5C542"/>
+    <path d="M-6 200 c 4 20 20 30 38 26" fill="none" stroke="#F5C542" stroke-width="8" stroke-linecap="round"/><circle cx="33" cy="226" r="5" fill="#F5C542"/>
+    <!-- grip with saffron binding -->
+    <rect x="80" y="-30" width="26" height="60" rx="8" fill="#B3261E" stroke="#5E1410" stroke-width="2.5"/>
+    <path d="M81 -18 H105 M81 -6 H105 M81 6 H105 M81 18 H105" stroke="#F5C542" stroke-width="3"/>
+    <!-- ornaments on limbs -->
+    <circle cx="70" cy="-112" r="7" fill="#B3261E" stroke="#FFF1B8" stroke-width="2"/>
+    <circle cx="70" cy="112" r="7" fill="#B3261E" stroke="#FFF1B8" stroke-width="2"/>
+    <!-- arrow shaft -->
+    <rect x="-164" y="-5" width="350" height="10" rx="5" fill="url(#shaft)" stroke="#7A4A06" stroke-width="2"/>
+    <!-- fletching -->
+    <path d="M-170 -5 L-132 -5 L-112 -30 L-150 -30 Z" fill="#F28C28" stroke="#7A3A06" stroke-width="2"/>
+    <path d="M-170 5 L-132 5 L-112 30 L-150 30 Z" fill="#F28C28" stroke="#7A3A06" stroke-width="2"/>
+    <!-- arrow head -->
+    <path d="M182 -22 L238 0 L182 22 L194 0 Z" fill="#FFF6DA" stroke="#7A4A06" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+</svg>

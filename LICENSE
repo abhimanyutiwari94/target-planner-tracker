@@ -1,0 +1,11 @@
+Target Planner and Tracker
+Copyright (c) 2026. All rights reserved.
+
+This software and its source code are proprietary. No permission is granted to copy, modify,
+distribute, sublicense or sell this software or any part of it without the prior written
+permission of the copyright owner. Using the app requires a valid activation (coupon) code
+issued by the copyright owner.
+
+Third-party open-source libraries bundled with the app (Preact, idb, jsPDF, jspdf-autotable,
+ExcelJS, docx, JSZip, Chart.js, Workbox, Capacitor) remain under their own licences
+(MIT / Apache-2.0).

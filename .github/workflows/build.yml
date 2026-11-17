@@ -1,0 +1,101 @@
+name: Build web app & Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Web app (GitHub Pages)
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+        continue-on-error: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        run: sdkmanager "platforms;android-36" "build-tools;35.0.0" "platform-tools"
+      - run: npm ci
+      - run: npm run build
+      - run: npx cap sync android
+      - name: Use private signing key if provided
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+            echo "TPT_KEYSTORE=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+            echo "Using keystore from repository secrets"
+          else
+            echo "Using bundled keystore android/app/tpt-release.keystore"
+          fi
+      - name: Build signed APK
+        working-directory: android
+        env:
+          TPT_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          TPT_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          TPT_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          export TPT_VERSION_CODE=${{ github.run_number }}
+          export TPT_VERSION_NAME="1.0.${{ github.run_number }}"
+          # empty secrets fall back to the defaults in app/build.gradle
+          [ -z "$TPT_KEYSTORE_PASSWORD" ] && unset TPT_KEYSTORE_PASSWORD
+          [ -z "$TPT_KEY_ALIAS" ] && unset TPT_KEY_ALIAS
+          [ -z "$TPT_KEY_PASSWORD" ] && unset TPT_KEY_PASSWORD
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleRelease
+          cp app/build/outputs/apk/release/app-release.apk "$GITHUB_WORKSPACE/TargetPlannerTracker.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TargetPlannerTracker-apk
+          path: TargetPlannerTracker.apk
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Target Planner and Tracker v1.0.${{ github.run_number }}
+          make_latest: true
+          body: |
+            **Download:** `TargetPlannerTracker.apk` below → open it on your Android phone → allow "Install unknown apps" → Install.
+            Updating? Just install the new APK over the old one – your data stays.
+          files: TargetPlannerTracker.apk

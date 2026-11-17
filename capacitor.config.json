@@ -1,0 +1,14 @@
+{
+  "appId": "com.tirdhanush.targetplanner",
+  "appName": "Target Planner and Tracker",
+  "webDir": "dist",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#06213F"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#F28C28"
+    }
+  }
+}
